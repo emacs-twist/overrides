@@ -1,0 +1,59 @@
+# -*- org-id-link-to-org-use-id: nil; -*-
+* Overrides for Twist.nix
+This is a collection of Emacs Lisp build overrides for [[https://github.com/emacs-twist/twist.nix][twist.nix]].
+** Installation
+Add to your ~flake.nix~:
+
+#+begin_src nix
+  {
+    inputs = {
+      emacs-overlay.url = "github:nix-community/emacs-overlay";
+      twist.url = "github:emacs-twist/twist.nix";
+      # Overrides for twist
+      twist-overrides.url = "github:emacs-twist/overrides";
+      ...
+    };
+
+    outputs = {...} @ args: {
+      # Your configuration
+    };
+  }
+#+end_src
+** Usage
+A minimal configuration example is as follows:
+
+#+begin_src nix
+  (emacsTwist {
+    initFiles = [
+      ./init.el
+    ];
+    lockDir = ./lock;
+    # At present, this is not provided from the repository
+    inputOverrides = {
+      ...
+    };
+    ...
+  }).overrideScope' inputs.twist-overrides.overlays.twistScope
+#+end_src
+
+If you bring your own overrides too, you can use ~lib.composeExtensions~ (or ~lib.composeManyExtensions~) to compose overlays:
+
+#+begin_src nix
+  (emacsTwist {
+    # Omitted to avoid duplicates
+    ...
+  }).overrideScope' (lib.composeExtensions
+    inputs.twist-overrides.overlays.twistScope
+    (self:super: {
+      elispPackages = super.elispPackages.overrideScope' (_eself: esuper: {
+        # Define your own overrides
+        emacsql-sqlite = esuper.emacsql-sqlite.overrideAttrs (old: {
+          buildInputs = ...;
+        });
+        ...
+      });
+    })
+  )
+#+end_src
+** Contribution
+This repository welcomes contribution.
