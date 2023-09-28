@@ -1,4 +1,4 @@
-# Based on https://github.com/akirak/nixpkgs/blob/a790cc526b488cf5d9966e9a45d2f4d2a92963a5/pkgs/applications/editors/emacs/elisp-packages/manual-packages/lsp-bridge/default.nix
+# Based on https://github.com/NixOS/nixpkgs/blob/a790cc526b488cf5d9966e9a45d2f4d2a92963a5/pkgs/applications/editors/emacs/elisp-packages/manual-packages/lsp-bridge/default.nix
 {pkgs, ...}: _old: {
   patches = [
     (pkgs.substituteAll {
