@@ -3,7 +3,7 @@ Function that should be passed to overrideScope' under an emacsTwist scope.
 */
 # Both self and super are instances of emacsTwist scope.
 self: super: {
-  elispPackages = super.elispPackages.overrideScope' (
+  elispPackages = super.elispPackages.overrideScope (
     _eself: esuper: let
       inherit (super) lib;
 
